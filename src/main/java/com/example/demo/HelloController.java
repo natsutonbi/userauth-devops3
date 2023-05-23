@@ -15,7 +15,7 @@ public class HelloController {
     @GetMapping("/")
     public String hello_html(ModelMap map)
     {
-        map.addAttribute("host", "http://127.0.0.1");
+        map.addAttribute("host", "http://114.51.4.0");
         return "index";
     }
 }
