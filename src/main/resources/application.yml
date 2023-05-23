@@ -1,0 +1,18 @@
+spring:
+  datasource:  # 配置mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://114.116.254.100/GradeDB
+    username: outer
+    password: 123456
+  thymeleaf:
+    prefix: classpath:/templates/ #视图前缀
+    suffix: .html                 #视图后缀
+    encoding: UTF-8               #编码
+    cache: false                  #缓存(默认开启，开发时建议关闭)
+# 以上关于thymeleaf的这些参数其实都无需设置，因为都默认设置好了。参考：ThymeleafProperties
+    
+server:
+  port: 8080  # 默认端口
+  
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
