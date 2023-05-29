@@ -25,12 +25,12 @@ public class userServiceImpl implements userService {
     private loginUserMapper loginmapper;
 
     @Value("${snowflake.workId}")
-    private long workId;
+    private static long workId;
 
     @Value("${snowflake.datacenterId}")
-    private long datacenterId;
+    private static long datacenterId;
 
-    private SnowFlake idGen=new SnowFlake(workId,datacenterId);
+    private static SnowFlake idGen=new SnowFlake(workId,datacenterId);
 
     @Override
     public int regist(@Param("info") userAccountInfo info){

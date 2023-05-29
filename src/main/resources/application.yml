@@ -4,7 +4,7 @@ spring:
   # 需要将其设置为always，彩色打印日志
   output:
     ansi:
-      enabled: always
+      enabled: always #彩色日志
   datasource:  # 配置mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://114.116.254.100:3306
@@ -16,7 +16,7 @@ spring:
       - classpath:db/userSchema.sql
       data-locations:
       - classpath:db/userData.sql
-      mode: always
+      mode: never
   #data:
   #  redis:
   #    host: 114.116.254.100
