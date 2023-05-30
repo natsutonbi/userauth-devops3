@@ -33,7 +33,7 @@ public class mailServiceImpl implements mailService{
      * @param text
      */
     @Override
-    public void sendSimpleMail(String to, String subject, String text) {
+    public void sendSimpleMail(String to, String subject, String text) throws Exception{
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(to);
@@ -45,8 +45,8 @@ public class mailServiceImpl implements mailService{
             log.info("简单邮件已经发送。");
         } catch (Exception e) {
             log.error("发送简单邮件时发生异常！", e);
+            throw e;
         }
-
     }
 
     /**
@@ -56,11 +56,11 @@ public class mailServiceImpl implements mailService{
      * @param content
      */
     @Override
-    public void sendHtmlMail(String to, String subject, String content) {
+    public void sendHtmlMail(String to, String subject, String content) throws Exception{
         MimeMessage message = mailSender.createMimeMessage();
         try {
             //true表示需要创建一个multipart message
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true,"utf-8");
             helper.setFrom(from);
             helper.setTo(to);
             helper.setSubject(subject);
@@ -70,6 +70,7 @@ public class mailServiceImpl implements mailService{
             log.info("html邮件发送成功");
         } catch (MessagingException e) {
             log.error("发送html邮件时发生异常！", e);
+            throw e;
         }
     }
 
@@ -82,7 +83,7 @@ public class mailServiceImpl implements mailService{
      * @param filePath
      */
     @Override
-    public void sendAttachmentsMail(String to, String subject, String content, String filePath){
+    public void sendAttachmentsMail(String to, String subject, String content, String filePath)throws Exception{
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -101,12 +102,13 @@ public class mailServiceImpl implements mailService{
             log.info("带附件的邮件已经发送。");
         } catch (MessagingException e) {
             log.error("发送带附件的邮件时发生异常！", e);
+            throw e;
         }
     }
 
 
     /**
-     * 发送正文中有静态资源（图片）的邮件
+     * 发送正文中有静态资源（比如图片）的邮件
      * @param to
      * @param subject
      * @param content
@@ -114,7 +116,7 @@ public class mailServiceImpl implements mailService{
      * @param rscId
      */
     @Override
-    public void sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId){
+    public void sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId)throws Exception{
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -130,6 +132,7 @@ public class mailServiceImpl implements mailService{
             log.info("嵌入静态资源的邮件已经发送。");
         } catch (MessagingException e) {
             log.error("发送嵌入静态资源的邮件时发生异常！", e);
+            throw e;
         }
     }
 }

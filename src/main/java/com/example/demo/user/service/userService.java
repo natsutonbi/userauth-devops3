@@ -11,7 +11,7 @@ public interface userService {
 
     int regist(@Param("info") userAccountInfo info);
 
-    userAccountInfo getByUsername(String username);
+    userAccountInfo getInfoByUsername(String username);
 
     boolean ifexist(String username);//是否存在用户
 

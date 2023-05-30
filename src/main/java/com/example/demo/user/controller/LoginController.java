@@ -65,7 +65,7 @@ public class LoginController
     {
         if(userv.check(username, password)){
             //登录成功
-            userAccountInfo info=userv.getByUsername(username);
+            userAccountInfo info=userv.getInfoByUsername(username);
             Cookie ck_usr=new Cookie("isLogin", "true");
             ck_usr.setMaxAge(15*24*60*60);
             ck_usr.setPath(request.getContextPath());

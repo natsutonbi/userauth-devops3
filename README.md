@@ -51,25 +51,47 @@ user可以拥有很多role，role也能有很大auth，而且实际数量是很�
 
 ### 数据库方面
 
-登录表
+#### 登录表
+
+登录验证核心
 
 - username(不可重复)
 - createtime
-- salt(char[16]16进制字符串)
+- salt(char[16]: 16进制字符串)
 - password(md5加密char[32]16进制字符串)
 - nickname(可重复)
 
+登录控制
+
 - ~~status(正常、冻结、风控、不可用/注销)~~
-<i>
+
+关联账号(可以有多个，但通告消息只能有一个)
+
 - tel(list)
 - email(list)
 - social account(list)
 - status(list——可设置冻结状态，不可登录；风控，更加频繁地登录验证)
-</i>
-权限表
+
+#### 权限表
+
+权限相当于是一把钥匙
+操作：
+
+- on user
+  - 用户账号状态设置
+  - 创建用户组group
+    - 无条件
+    - 需上级审核
+    - 无权限
+  - group加入用户
+    - 无条件
+    - 需上级审核
+    - 需受邀用户同意
+- on resource
+  - 设置可见(访客,登录用户,)
 
 1. user
-   - id
+   - uuid
    - privilege(list)
      - action
      - url/object
@@ -95,7 +117,14 @@ user可以拥有很多role，role也能有很大auth，而且实际数量是很�
    - begin time
    - end time
 
-配置表
+基础角色:
+
+- root: 所有操作
+- group owner: (on certain group) 委任manager+所有manager权限
+- group manager: 邀请成员
+- group member: (需要manager同意): 邀请成员; 向组员发送消息、通告消息
+
+#### 配置表
 
 在赋予role时可能会有冲突，比如一个人不可能既是研究生也是本科生
 冲突表由管理员设置，赋予role时查询冲突表
@@ -166,6 +195,43 @@ SpringBoot是一个基于Java的开源框架，用于**创建微服务**。它�
 
 ---
 
+## MailSend
+
+导入依赖
+
+```bash
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+
+1. 从邮件服务器获取邮件服务，如smtp（这里以网易邮箱为例）
+2. 配置application.yml
+
+```yml
+spring:
+  mail:
+    host: smtp.163.com
+    username: xxxx@163.com
+    password: xxxxxxxx
+```
+
+测试simplemailSender
+
+```java
+@Autowired
+mailService mailServ;
+@Test
+public void simpleMailTest(){
+mailServ.sendSimpleMail("1306512118@qq.com", "testmail", "hello,natsutonbi. (from spring boot)");
+}
+```
+
+![simpleMailTest](img/testmail.png)
+
+---
+
 ## Kafka
 
 基础：zookeeper是一个分布式协调服务，解决多个进程间的同步限制，防止分布式锁
@@ -205,6 +271,7 @@ cd /usr/local/kafka-cluster/kafka1/bin/
   - [x] 用户登录
   - [x] mybatis plus应用
   - [x] 用户注册
+  - [x] 邮件发送
   - [ ] 操作分权
   - [ ] kafka消息队列
 

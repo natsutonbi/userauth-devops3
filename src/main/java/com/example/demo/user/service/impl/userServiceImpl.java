@@ -75,14 +75,14 @@ public class userServiceImpl implements userService {
     }
 
     @Override
-    public userAccountInfo getByUsername(String username){
+    public userAccountInfo getInfoByUsername(String username){
         List<userAccountInfo> users=loginmapper.getByUsername(username);
         if(users==null||users.size()==0) 
         {
             log.warn("no user {}",username);
             return null;
         }
-        if(users.size()>1) log.warn("duplicate users, num="+users.size());//警告重复用户
+        if(users.size()>1) log.warn("duplicate users in login_user table, num="+users.size());//警告重复用户
         return users.get(0);
     }
 }
