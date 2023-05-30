@@ -21,6 +21,6 @@ public interface loginUserMapper extends BaseMapper<userAccountInfo> {
     "(#{username},#{createtime},#{salt},#{password},#{nickname})")
     public int insert(userAccountInfo info);
 
-    @Update("UPDATE `User`.`user_login` SET password=#{password} nickname=#{nickname} WHERE username=#{username}")
+    @Update("UPDATE `User`.`user_login` SET password=#{password},nickname=#{nickname} WHERE username=#{username}")
     public int update(userAccountInfo info);
 }

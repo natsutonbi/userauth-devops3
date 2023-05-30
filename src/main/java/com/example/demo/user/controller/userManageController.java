@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.user.entity.msgReciever;
+import com.example.demo.user.entity.userAccountInfo;
 import com.example.demo.user.service.userManageService;
 import com.example.demo.user.service.userService;
+import com.example.demo.user.utils.MD5SaltPwd;
 import com.example.demo.user.utils.sessionOper;
 
 import jakarta.servlet.http.HttpSession;
@@ -35,7 +37,8 @@ public class userManageController {
     @ResponseBody
     @RequestMapping("/set/reciever")
     public String setReciever(
-        @RequestParam(name = "email",defaultValue = "")String email,
+        @RequestParam(name = "emailuser",defaultValue = "")String emailuser,
+        @RequestParam(name = "emaildomain",defaultValue = "")String emaildomain,
         @RequestParam(name = "tel",defaultValue = "")String tel,
         HttpSession session)
     {
@@ -43,6 +46,7 @@ public class userManageController {
         if(loginUser==null) return "wrong user";
         String username=loginUser.toString();
         msgReciever reciever=uManageServ.getRecieverByUsername(username);
+        String email="";
         if(reciever==null){
             if(!uServ.ifexist(username)){
                 log.error("no such user: {}, but still pass login intercreptor",username);
@@ -52,9 +56,29 @@ public class userManageController {
             uManageServ.initReciever(reciever);
             return "set success";
         }
-        if(!"".equals(email)) reciever.setEmail(email);
+        if(!"".equals(emailuser)) 
+        {
+            email=emailuser+"@"+emaildomain;
+            reciever.setEmail(email);
+            log.info("get email {}", email);
+        }
         if(!"".equals(tel)) reciever.setTel(tel);
         uManageServ.updateReciever(reciever);
         return "set success";
+    }
+
+    @ResponseBody
+    @RequestMapping("/set/info")
+    public String setInfo(
+        @RequestParam(name = "password",defaultValue = "") String pwd,
+        @RequestParam(name = "nickname",defaultValue = "") String nickname,
+        HttpSession session
+    ){
+        userAccountInfo info=uServ.getInfoByUsername(sessionOper.getUsername(session));
+        if(info==null) return "wrong user";
+        if(!("".equals(pwd)||pwd==null)) info.password=MD5SaltPwd.getSaltedPwd(pwd, info.salt);
+        if(!("".equals(nickname)||nickname==null)) info.nickname=nickname;
+        uServ.update(info);
+        return "success";
     }
 }

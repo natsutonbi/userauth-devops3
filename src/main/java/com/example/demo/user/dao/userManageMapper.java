@@ -20,6 +20,6 @@ public interface userManageMapper extends BaseMapper<msgReciever>{
     "(#{username},#{email},#{tel})")
     public int insert(msgReciever reciever);
 
-    @Update("UPDATE `User`.`user_login` SET email=#{email} tel=#{tel} WHERE username=#{username}")
+    @Update("UPDATE `User`.`message_recieve` SET email=#{email},tel=#{tel} WHERE username=#{username}")
     public int update(msgReciever reciever);
 }

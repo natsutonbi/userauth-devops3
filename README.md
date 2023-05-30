@@ -349,8 +349,8 @@ cd /usr/local/kafka-cluster/kafka1/bin/
 |username   |password   |nickname   |
 |----|----|----|
 |root|123456|admin
-|3621404104720384|123456|natsutonbi2
 |3619146277322752|123456|natsutonbi
+|3621404104720384|123456|natsutonbi2
 
 ---
 

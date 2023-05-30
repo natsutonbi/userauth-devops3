@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.example.demo.user.service.userService;
+import com.example.demo.user.utils.sessionOper;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class generalController {
     @Autowired
@@ -23,10 +26,11 @@ public class generalController {
         if(username==null) return "you are visitor";
         String account=username.toString();
         String nickname=userv.getInfoByUsername(account).nickname;
-        return "you are "+nickname+". account="+account;
+        return "you are "+nickname+".\naccount= "+account;
     }
     @RequestMapping("/user/logout")
     public String logout(HttpSession session, SessionStatus sessionStatus){
+        log.info("user [{}] logout",sessionOper.getUsername(session));
         session.invalidate();
         sessionStatus.setComplete();
         return "redirect:/user/login";

@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +32,7 @@ public class userServiceImpl implements userService {
     private static SnowFlake idGen=new SnowFlake(workId,datacenterId);
 
     @Override
-    public int regist(@Param("info") userAccountInfo info){
+    public int regist(userAccountInfo info){
         if(ifexist(info.username)) {
             log.warn("already exist user {}", info.username);
             return -1;
@@ -84,5 +83,10 @@ public class userServiceImpl implements userService {
         }
         if(users.size()>1) log.warn("duplicate users in login_user table, num="+users.size());//警告重复用户
         return users.get(0);
+    }
+
+    @Override
+    public int update(userAccountInfo info){
+        return loginmapper.update(info);
     }
 }
