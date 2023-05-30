@@ -1,9 +1,12 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.demo.user.service.mailService;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)//随机端口启动
 class DemoApplicationTests {
 	/*@Autowired
 	private loginUserMapper loginMapper;
@@ -34,4 +37,12 @@ class DemoApplicationTests {
 		List<gradeItem> grades=gMapper.getAll();
 		System.out.println(grades.size());
 	}*/
+	@Autowired
+	mailService mailServ;
+
+	@Test//必须在app运行情况下test
+	public void simpleMailTest()
+	{
+		mailServ.sendSimpleMail("1306512118@qq.com", "testmail", "hello,natsutonbi. (from spring boot)");
+	}
 }

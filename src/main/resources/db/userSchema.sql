@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `User`.`user_login`
+CREATE TABLE `User`.`user_login`
 (
     `username` VARCHAR(32) NOT NULL,
     `createtime` DATE NOT NULL,

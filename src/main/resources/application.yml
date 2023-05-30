@@ -16,7 +16,7 @@ spring:
       - classpath:db/userSchema.sql
       data-locations:
       - classpath:db/userData.sql
-      mode: never
+      mode: never #可能不适于mysql
   #data:
   #  redis:
   #    host: 114.116.254.100
@@ -28,10 +28,14 @@ spring:
     encoding: UTF-8               #编码
     cache: false                  #缓存(默认开启，开发时建议关闭)
 # 以上关于thymeleaf的这些参数其实都无需设置，因为都默认设置好了。参考：ThymeleafProperties
-
+  mail:
+    host: smtp.163.com
+    username: kv30246@163.com
+    password: HITNYKVIRNQOFHGE
 server:
   port: 8080  # 默认端口
 
 snowflake:
   datacenterId: 1
   workId: 1
+

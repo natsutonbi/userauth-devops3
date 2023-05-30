@@ -166,6 +166,40 @@ SpringBoot是一个基于Java的开源框架，用于**创建微服务**。它�
 
 ---
 
+## Kafka
+
+基础：zookeeper是一个分布式协调服务，解决多个进程间的同步限制，防止分布式锁
+
+分布式、具有高吞吐量、pub/sub模式
+
+消息消费模式还有p2p
+
+### 应用场景
+
+- 缓存
+- 削峰
+- 解耦
+- 异步通信
+
+消息队列的pub/sub模式分topic
+由于分布式负载均衡，topic分partition
+容错加副本，因此分leader和follower，后者只做备份，有机会成为leader
+![kafka架构](img/kafka机制.png)
+
+注意修改server.properties
+brokeid在集群中唯一
+log_dir默认为/tmp/kafka，需修改到非临时目录
+zookeeper.connect为集群 host1:port,host2:port,host3:port/dir——设置zookeeper方便查找
+
+创建topic
+
+```bash
+cd /usr/local/kafka-cluster/kafka1/bin/
+./kafka-topics.sh --create --zookeeper 172.17.80.219:2181 --replication-factor 2 --partitions 2 --topic topic1
+```
+
+---
+
 - ## todo
 
   - [x] 用户登录
@@ -188,8 +222,79 @@ SpringBoot是一个基于Java的开源框架，用于**创建微服务**。它�
      - 同步session，服务器间备份
      - 共享session，其他服务器向存有session的服务器查询
      - 存到数据库，数据库来做集群
+4. 配置文件加密
+
+   使用插件
+
+   ```xml
+   <plugin>
+      <groupId>com.github.ulisesbocchio</groupId>
+      <artifactId>jasypt-maven-plugin</artifactId>
+      <version>3.0.3</version>
+   </plugin>
+   ```
+
+   加密内容用DEC()包裹起来
+
+   ```yml
+   spring:
+      datasource:
+         driver-class-name: com.mysql.cj.jdbc.Driver
+         url: jdbc:mysql://114.51.4.0:3306
+         username: test
+         password: DEC(123456)
+   jasypt:
+      encryptor:
+         password: didispace
+   ```
+
+   终端执行命令加密，而且运行时会解密读出
+
+   ```bash
+   mvn jasypt:encrypt -Djasypt.encryptor.password=didispace
+   ```
+
+   对于yml文件
+
+   ```bash
+   mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/resources/application.yml" -Djasypt.encryptor.password="didispace"
+   ```
+
+   解密只在终端输出配置文件，不会修改配置文件
+
+   ```bash
+   mvn jasypt:decrypt -Djasypt.encryptor.password=didispace
+   ```
+
+   对于yml文件
+
+   ```bash
+   mvn jasypt:decrypt -Djasypt.plugin.path="file:src/main/resources/application.yml" -Djasypt.encryptor.password="didispace"
+   ```
+
+   在实际应用的过程中，jasypt.encryptor.password的配置，可以通过环境变量或启动参数中注入，而不是在配置文件中指定
+[jasypt参考](https://github.com/ulisesbocchio/jasypt-spring-boot)
 
 ---
-root 默认密码123456 名称admin
-3621404104720384 123456 natsutonbi2
-3619146277322752 123456 natsutonbi
+
+目前账户
+
+|username   |password   |nickname   |
+|----|----|----|
+|root|123456|admin
+|3621404104720384|123456|natsutonbi2
+|3619146277322752|123456|natsutonbi
+
+---
+
+打包命令
+
+```bash
+mvnw.cmd clean package
+```
+
+查看端口占用
+
+```bash
+lsof -i:port
+```
