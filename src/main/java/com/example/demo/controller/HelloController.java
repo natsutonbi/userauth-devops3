@@ -16,7 +16,7 @@ public class HelloController {
     @GetMapping("/hello/{id}")
     public String helloId(@PathVariable("id") String id)
     {
-        return "hello, #"+id;
+        return "hello, "+id;
     }
     @GetMapping("/")
     public String hello_html(ModelMap map)

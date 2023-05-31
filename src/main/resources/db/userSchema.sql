@@ -14,3 +14,18 @@ CREATE TABLE `User`.`message_recieve`
     `tel` VARCHAR(16),
     PRIMARY KEY(`username`)
 );
+
+CREATE TABLE `User`.`group_info`
+(
+    `groupid` VARCHAR(32) NOT NULL,
+    `owner` VARCHAR(32) NOT NULL,
+    `groupname` VARCHAR(32),
+    PRIMARY KEY(`groupid`)
+);
+
+CREATE TABLE `User`.`group_member`
+(
+    `groupid` VARCHAR(32) NOT NULL,
+    `username` VARCHAR(32) NOT NULL,
+    `grouprole` VARCHAR(32) NOT NULL
+);

@@ -1,5 +1,6 @@
-package com.example.demo.user.entity;
+package com.example.demo.user.group.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
@@ -8,15 +9,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("`User`.`message_recieve`")
-public class msgReciever extends Model<msgReciever> {
+@TableName("`User`.`group_member`")
+public class groupMember extends Model<groupMember>{
+    public String groupid;
+    @TableLogic//update时只会在where而不在set
     public String username;
-    public String email;
-    public String tel;
+    public String grouprole;//member、manager、owner
 }

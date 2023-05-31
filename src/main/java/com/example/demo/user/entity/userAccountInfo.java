@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("user_login")
+@TableName("`User`.`user_login`")
 public class userAccountInfo extends Model<userAccountInfo> {
     //不变
     public String username;//实际上就是uid

@@ -37,5 +37,8 @@ server:
 
 snowflake:
   datacenterId: 1
-  workId: 1
+  user:
+    workId: 1
+  group:
+    workId: 2
 

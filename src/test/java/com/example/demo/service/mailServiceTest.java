@@ -52,7 +52,6 @@ public class mailServiceTest {
         mailService.sendInlineResourceMail(destMail, "主题：这是有图片的邮件", content, imgPath, rscId);
     }
 
-
     @Test
     public void sendTemplateMail() throws Exception {
         //创建邮件正文

@@ -23,7 +23,7 @@ public class userServiceImpl implements userService {
     @Autowired
     private loginUserMapper loginmapper;
 
-    @Value("${snowflake.workId}")
+    @Value("${snowflake.user.workId}")
     private static long workId;
 
     @Value("${snowflake.datacenterId}")

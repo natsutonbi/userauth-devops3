@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor//生成无参构造
 @Accessors(chain = true)//set返回this,可以class.setA(a).setB(b).setC(c);
-@TableName("GRADE")
+@TableName("`GradeDB`.`GRADE`")
 public class gradeItem
 {
     public int SID,CID;
