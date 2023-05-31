@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.user.entity.msgReciever;
 
 @Mapper
-public interface userManageMapper extends BaseMapper<msgReciever>{
+public interface msgRecieverMapper extends BaseMapper<msgReciever>{
     @Select("SELECT * FROM `User`.`message_recieve` WHERE username=#{username}")
     public List<msgReciever> getByUsername(@Param("username")String username);
 

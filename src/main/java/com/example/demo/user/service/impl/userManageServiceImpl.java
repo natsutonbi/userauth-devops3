@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.user.dao.userManageMapper;
+import com.example.demo.user.dao.msgRecieverMapper;
 import com.example.demo.user.entity.msgReciever;
 import com.example.demo.user.service.userManageService;
 
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class userManageServiceImpl implements userManageService{
     @Autowired
-    userManageMapper manageMapper;
+    msgRecieverMapper manageMapper;
 
     @Override
     public msgReciever getRecieverByUsername(String username)

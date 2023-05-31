@@ -15,6 +15,7 @@ import com.example.demo.user.utils.sessionOper;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/user/message")
 public class messageController {
     @Autowired
     mailService mail;
@@ -26,7 +27,7 @@ public class messageController {
     userManageService uMServ;
 
     @ResponseBody
-    @RequestMapping("/user/message/send/simplemail")
+    @RequestMapping("/send/simplemail")
     public String sendEmail(
         @RequestParam("content") String content,
         @RequestParam("target") String targetUsername,

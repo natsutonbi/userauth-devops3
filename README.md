@@ -274,6 +274,7 @@ cd /usr/local/kafka-cluster/kafka1/bin/
   - [x] 邮件发送
   - [ ] 操作分权
   - [ ] kafka消息队列
+  - [ ] swagger文档构建与维护
 
 ---
 
