@@ -27,6 +27,12 @@ public class groupController {
     }//4234290615287808
 
     @ResponseBody
+    @RequestMapping("/get/all")
+    String getAll(){
+        return gserv.getAll().toString();
+    }
+
+    @ResponseBody
     @RequestMapping("/get")
     String getGroup(@RequestParam("groupid") String groupid){
         return gserv.getByID(groupid).toString();

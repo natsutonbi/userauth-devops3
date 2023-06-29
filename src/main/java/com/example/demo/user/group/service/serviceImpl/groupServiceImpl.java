@@ -55,6 +55,10 @@ public class groupServiceImpl implements groupService {
     }
 
     @Override
+    public List<group> getAll(){
+        return gMapper.getAll();
+    }
+    @Override
     public int rename(String groupid,String newname){
         group g=getByID(groupid);
         if(g==null) return -1;

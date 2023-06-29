@@ -26,10 +26,16 @@ public class LoginHandlerInterceptor implements HandlerInterceptor{
                 return false;
             }
             String isLogin=null;
+            String username="";
             for(Cookie item:cookies)
             {
                 if("isLogin".equals(item.getName())){
                     isLogin=item.getValue();
+                    for(Cookie item2:cookies)
+                    {
+                        if("username".equals(item2.getName()))
+                            username=item.getValue();
+                    }
                     break;
                 }
             }
@@ -41,7 +47,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor{
                 return false;
             }
             //通过cookie验证
-
+            request.getSession().setAttribute("loginUser", username);
         }
         //服务端session显示已经登录
         return true;

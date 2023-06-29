@@ -34,7 +34,6 @@ public class MD5SaltPwd {
             return hex(digest);
         } catch (Exception e) {
             e.printStackTrace();
-            //System.out.println(e.toString());
             return "";
         }
     }

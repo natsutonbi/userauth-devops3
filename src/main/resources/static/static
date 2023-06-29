@@ -1,0 +1,1 @@
+session存在服务端，相当于为了避免频繁查数据库，默认30min，在服务器内存里，sessionId在客户端，默认存cookie，禁用cookie则url重写；session有分布式问题，可以采取

@@ -53,18 +53,26 @@ public class userManageController {
                 return "you are not in the system";
             }
             reciever=new msgReciever(username,email,tel);
-            uManageServ.initReciever(reciever);
-            return "set success";
+            uManageServ.initReciever(reciever);//没有则初始化
         }
-        if(!"".equals(emailuser)) 
+        boolean changeFlag=false;
+        if(!"".equals(emailuser))
         {
             email=emailuser+"@"+emaildomain;
             reciever.setEmail(email);
-            log.info("get email {}", email);
+            log.info("{} set email={}", username, email);
+            changeFlag=true;
         }
-        if(!"".equals(tel)) reciever.setTel(tel);
-        uManageServ.updateReciever(reciever);
-        return "set success";
+        if(!"".equals(tel)) {
+            reciever.setTel(tel);
+            log.info("{} set tel={}", username, tel);
+            changeFlag=true;
+        }
+        if(changeFlag){
+            uManageServ.updateReciever(reciever);
+            return "set success";
+        }
+        return "nothing happened, plz input email/tel";
     }
 
     @ResponseBody

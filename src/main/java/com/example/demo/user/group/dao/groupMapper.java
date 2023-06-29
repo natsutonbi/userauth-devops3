@@ -15,6 +15,9 @@ public interface groupMapper extends BaseMapper<group> {
     @Select("SELECT * FROM `User`.`group_info` WHERE groupid=#{groupid}")
     List<group> getByGroupID(@Param("groupid")String groupID);
 
+    @Select("SELECT * FROM `User`.`group_info`")
+    List<group> getAll();
+
     //@Insert("INSERT INTO `User`.`group_info` (username,createtime,salt,password,nickname) VALUES "+
     //"(#{username},#{createtime},#{salt},#{password},#{nickname})")
 }

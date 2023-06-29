@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title>收到的消息</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>学生ID</th>
+            <th>课程ID</th>
+            <th>分数</th>
+            <th>备注</th>
+        </tr>
+        <tr th:each="item: ${itemList}">
+            <td th:text="${item.SID}"></td>
+            <td th:text="${item.CID}"></td>
+            <td th:text="${item.Score}"></td>
+            <td th:text="${item.Note}"></td>
+        </tr>
+    </table>
+</body>
+</html>

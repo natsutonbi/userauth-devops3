@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.user.service.mailService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)//随机端口启动
 @Rollback(true)//其实默认就是回滚
@@ -54,7 +57,7 @@ class DemoApplicationTests {
 			mailServ.sendSimpleMail("1306512118@qq.com", "testmail", "hello,natsutonbi. (from spring boot)");
 		}
 		catch(Exception e){
-			System.out.println("failed to send");
+			log.error("failed to send");
 		}
 	}
 }

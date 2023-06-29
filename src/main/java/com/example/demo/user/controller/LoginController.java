@@ -24,7 +24,7 @@ public class LoginController
     @Autowired
     private userService userv;
 
-    //127.0.0.1:8080/user/login/val/v2?username=3621404104720384&password=123456
+    //127.0.0.1:8080/user/login/val?username=3621404104720384&password=123456
     @RequestMapping("/user/login/val")
     public String login(
         @RequestParam String username,
@@ -38,9 +38,13 @@ public class LoginController
             //登录成功
             userAccountInfo info=userv.getInfoByUsername(username);
             Cookie ck_usr=new Cookie("isLogin", "true");
-            ck_usr.setMaxAge(15*24*60*60);
-            ck_usr.setPath(request.getContextPath());
+            Cookie ck_name=new Cookie("username", username);
+            ck_usr.setMaxAge(15*24*60*60);//15day
+            ck_usr.setPath("/");
+            ck_name.setMaxAge(15*24*60*60);//15day
+            ck_name.setPath("/");
             response.addCookie(ck_usr);
+            response.addCookie(ck_name);
             session.setAttribute("loginUser", username);
             log.info("user ["+username+"] login");
             map.put("msg", "登录成功, 欢迎"+info.nickname);

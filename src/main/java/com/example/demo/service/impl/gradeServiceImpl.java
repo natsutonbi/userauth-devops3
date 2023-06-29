@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dao.gradeMapper;
-import com.example.demo.entity.gradeItem;
+import com.example.demo.grade.dao.gradeMapper;
+import com.example.demo.grade.entity.gradeItem;
 import com.example.demo.service.gradeService;
 
 @Service

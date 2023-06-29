@@ -8,6 +8,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.Resource;
+
 import com.example.demo.user.service.mailService;
 
 import jakarta.mail.MessagingException;
@@ -22,6 +25,9 @@ import java.io.File;
 public class mailServiceImpl implements mailService{
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Value("${spring.mail.username}")
     private String from;
@@ -84,6 +90,20 @@ public class mailServiceImpl implements mailService{
      */
     @Override
     public void sendAttachmentsMail(String to, String subject, String content, String filePath)throws Exception{
+        File f;
+        try {
+            if(filePath.startsWith("classpath:"))
+            {
+                Resource resource=resourceLoader.getResource(filePath);
+                f=resource.getFile();
+            }else{
+                f=new File(filePath);
+            }
+        } catch (Exception e) {
+            log.error("load attach file failed");
+            throw e;
+        }
+        
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -93,7 +113,7 @@ public class mailServiceImpl implements mailService{
             helper.setSubject(subject);
             helper.setText(content, true);
 
-            FileSystemResource file = new FileSystemResource(new File(filePath));
+            FileSystemResource file = new FileSystemResource(f);
             String fileName = filePath.substring(filePath.lastIndexOf(File.separator));
             helper.addAttachment(fileName, file);
             //helper.addAttachment("test"+fileName, file);
@@ -117,6 +137,20 @@ public class mailServiceImpl implements mailService{
      */
     @Override
     public void sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId)throws Exception{
+        File f;
+        try {
+            if(rscPath.startsWith("classpath:"))
+            {
+                Resource resource=resourceLoader.getResource(rscPath);
+                f=resource.getFile();
+            }else{
+                f=new File(rscPath);
+            }
+        } catch (Exception e) {
+            log.error("load inline file failed");
+            throw e;
+        }
+        
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -125,8 +159,8 @@ public class mailServiceImpl implements mailService{
             helper.setSubject(subject);
             helper.setText(content, true);
 
-            FileSystemResource res = new FileSystemResource(new File(rscPath));
-            helper.addInline(rscId, res);
+            FileSystemResource res = new FileSystemResource(f);
+            helper.addInline(rscId, res);//通过html嵌入图片，向html的id处添加
 
             mailSender.send(message);
             log.info("嵌入静态资源的邮件已经发送。");
