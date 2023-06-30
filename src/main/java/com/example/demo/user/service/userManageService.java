@@ -2,7 +2,7 @@ package com.example.demo.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.user.entity.msgReciever;
+import com.example.demo.user.dao.entity.msgReciever;
 
 @Service
 public interface userManageService {

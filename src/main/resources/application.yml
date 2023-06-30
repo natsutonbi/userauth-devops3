@@ -1,10 +1,24 @@
+server:
+  port: 8080  # 默认端口
 spring:
-  profiles:
-    active: log.yml
+  application:
+    name: demoApp
+  #profiles:
+  #  active: adminserver
   # 需要将其设置为always，彩色打印日志
   output:
     ansi:
       enabled: always #彩色日志
+  boot:
+    admin:
+      client:
+        url: http://localhost:6288
+        instance:
+          service-url: http://localhost:8080
+  security:
+    user:
+      name: admin
+      password: 123456
   datasource:  # 配置mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://114.116.254.100:3306
@@ -59,10 +73,17 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka提供的序列化
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka提供的反序列化类
       auto-commit-interval: 1000ms # 提交offset延时(接收到消息后多久提交offset)
-
-server:
-  port: 8080  # 默认端口
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file:
+    name: logs/demoApp.file.log
 snowflake:
   datacenterId: 1
   user:

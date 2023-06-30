@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.user.group.dao.groupMapper;
-import com.example.demo.user.group.entity.group;
+import com.example.demo.user.group.dao.entity.group;
 import com.example.demo.user.group.service.groupMemberService;
 import com.example.demo.user.group.service.groupService;
 import com.example.demo.user.service.userService;

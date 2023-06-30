@@ -1,5 +1,6 @@
-package com.example.demo.user.entity;
+package com.example.demo.user.group.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
@@ -14,9 +15,11 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("`User`.`message_recieve`")
-public class msgReciever extends Model<msgReciever> {
-    public String username;
-    public String email;
-    public String tel;
+@TableName("`User`.`group_info`")
+public class group extends Model<group>{
+    
+    @TableId
+    public String groupid;
+    public String owner;//username
+    public String groupname;
 }

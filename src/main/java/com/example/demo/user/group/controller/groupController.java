@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.user.group.entity.group;
+import com.example.demo.user.group.dao.entity.group;
 import com.example.demo.user.group.service.groupService;
 import com.example.demo.user.utils.sessionOper;
 

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.user.entity.msgReciever;
+import com.example.demo.user.dao.entity.msgReciever;
 
 @Mapper
 public interface msgRecieverMapper extends BaseMapper<msgReciever>{

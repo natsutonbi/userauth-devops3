@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.grade.entity.gradeItem;
+import com.example.demo.grade.dao.entity.gradeItem;
 
 @Transactional
 public interface gradeService {

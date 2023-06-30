@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.user.dao.msgRecieverMapper;
-import com.example.demo.user.entity.msgReciever;
+import com.example.demo.user.dao.entity.msgReciever;
 import com.example.demo.user.service.userManageService;
 
 import lombok.extern.slf4j.Slf4j;

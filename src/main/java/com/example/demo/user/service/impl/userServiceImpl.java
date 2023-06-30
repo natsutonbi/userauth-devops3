@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.user.dao.loginUserMapper;
-import com.example.demo.user.entity.userAccountInfo;
+import com.example.demo.user.dao.entity.userAccountInfo;
 import com.example.demo.user.service.userService;
 import com.example.demo.user.utils.MD5SaltPwd;
 import com.example.demo.user.utils.SnowFlake;

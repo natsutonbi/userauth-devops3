@@ -12,8 +12,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         log.info("开始静态资源映射...");
-        registry.addResourceHandler("/test/**") // 表示文件路径
-            .addResourceLocations("classpath:/test/"); // 表示要开放的资源
-        registry.addResourceHandler("/front/**").addResourceLocations("classpath:/front/");
+        registry.addResourceHandler("/res/**") // 表示路径
+            .addResourceLocations("classpath:/resources/"); // 表示要开放的资源
     }
 }

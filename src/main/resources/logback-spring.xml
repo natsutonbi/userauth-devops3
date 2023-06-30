@@ -9,7 +9,8 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
     <!--
     子节点<property> ：用来定义变量值，它有两个属性name和value，通过<property>定义的值会被插入到logger上下文中，可以使“${}”来使用变量。
     -->
-    <property name="APP_NAME" value="demo-devops"/>
+    <!-- <property name="APP_NAME" value="demo-devops"/> -->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
     <property name="LOG_HOME" value="logs"/>
     <!--
      子节点<timestamp>：获取时间戳字符串，他有两个属性key和datePattern
@@ -105,6 +106,16 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
         </rollingPolicy>
     </appender>
 
+    <!-- <appender name="GENERAL-LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%-5p] [%t] [%C:%L] %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}//${APP_NAME}.file.log</fileNamePattern>
+            <maxHistory>24</maxHistory>
+        </rollingPolicy>
+    </appender> -->
+
     <!--
       FileAppender：把日志添加到文件，有以下子节点：
     　  <file>：被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。
@@ -112,8 +123,9 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
     　　<encoder>：对记录事件进行格式化。（具体参数稍后讲解 ）
     　　<prudent>：如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false。
       -->
+    <springProperty scope="context" name="LOG_NAME" source="logging.file.name"/>
     <appender name="File" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_HOME}/${appName}.file.log</file>
+        <file>${LOG_NAME}</file>
         <append>true</append>　
         <encoder>
             <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
@@ -121,6 +133,12 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
     </appender>
     
     <!-- 异步输出 -->
+    <!-- <appender name="ASYNC-GENERAL" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="GENERAL-LOG"/>
+        <includeCallerData>true</includeCallerData>
+    </appender> -->
     <appender name="ASYNC-INFO" class="ch.qos.logback.classic.AsyncAppender">
         <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
         <discardingThreshold>0</discardingThreshold>
@@ -155,6 +173,8 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
     -->
     <root level="info">
         <appender-ref ref="COLOR-CONSOLE"/>
+        <!-- <appender-ref ref="ASYNC-GENERAL"/> -->
+        <appender-ref ref="File"/>
         <appender-ref ref="ASYNC-INFO"/>
         <appender-ref ref="ASYNC-ERROR"/>
     </root>

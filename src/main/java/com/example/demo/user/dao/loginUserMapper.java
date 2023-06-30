@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.user.entity.userAccountInfo;
+import com.example.demo.user.dao.entity.userAccountInfo;
 
 @Mapper
 public interface loginUserMapper extends BaseMapper<userAccountInfo> {

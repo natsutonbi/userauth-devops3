@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.user.group.entity.group;
+import com.example.demo.user.group.dao.entity.group;
 
 @Mapper
 public interface groupMapper extends BaseMapper<group> {

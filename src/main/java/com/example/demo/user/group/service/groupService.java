@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.user.group.entity.group;
+import com.example.demo.user.group.dao.entity.group;
 
 @Service
 public interface groupService {

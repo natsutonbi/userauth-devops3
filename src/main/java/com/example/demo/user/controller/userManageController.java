@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.user.entity.msgReciever;
-import com.example.demo.user.entity.userAccountInfo;
+import com.example.demo.user.dao.entity.msgReciever;
+import com.example.demo.user.dao.entity.userAccountInfo;
 import com.example.demo.user.service.userManageService;
 import com.example.demo.user.service.userService;
 import com.example.demo.user.utils.MD5SaltPwd;

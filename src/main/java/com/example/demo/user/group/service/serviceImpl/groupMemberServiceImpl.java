@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.user.group.dao.groupMemberMapper;
-import com.example.demo.user.group.entity.groupMember;
+import com.example.demo.user.group.dao.entity.groupMember;
 import com.example.demo.user.group.service.groupMemberService;
 
 import lombok.extern.slf4j.Slf4j;

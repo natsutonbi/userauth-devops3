@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.user.entity.userAccountInfo;
+import com.example.demo.user.dao.entity.userAccountInfo;
 import com.example.demo.user.service.userService;
 
 import lombok.extern.slf4j.Slf4j;

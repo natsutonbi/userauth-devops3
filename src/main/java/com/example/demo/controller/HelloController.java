@@ -2,7 +2,11 @@ package com.example.demo.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.ui.ModelMap;
 @Controller
 public class HelloController {
@@ -23,5 +27,10 @@ public class HelloController {
     {
         map.addAttribute("host", "http://127.0.0.1");
         return "index";
+    }
+    @ResponseBody
+    @RequestMapping("/echo")
+    public String echoPath(HttpServletRequest request){
+        return request.getServletPath();
     }
 }

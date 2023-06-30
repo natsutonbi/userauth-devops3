@@ -1,0 +1,6 @@
+server:
+  port: 6288
+spring:
+  output:
+    ansi:
+      enabled: always #彩色日志

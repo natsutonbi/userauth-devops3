@@ -2,7 +2,7 @@ package com.example.demo.user.privilege.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.example.demo.user.group.entity.group;
+import com.example.demo.user.group.dao.entity.group;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

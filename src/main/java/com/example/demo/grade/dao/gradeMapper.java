@@ -1,7 +1,7 @@
 package com.example.demo.grade.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.grade.entity.gradeItem;
+import com.example.demo.grade.dao.entity.gradeItem;
 
 import java.util.List;
 

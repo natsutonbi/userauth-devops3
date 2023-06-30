@@ -1,4 +1,4 @@
-package com.example.demo.grade.entity;
+package com.example.demo.grade.dao.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.AllArgsConstructor;

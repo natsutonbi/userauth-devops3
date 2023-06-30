@@ -1,7 +1,5 @@
 package com.example.demo.user.utils;
-//import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-//import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class MD5SaltPwd {
@@ -27,7 +25,7 @@ public class MD5SaltPwd {
      * 
      * @return String 返回加密后的十六进制字符串
      */
-    private static String md5Hex(String str) {
+    public static String md5Hex(String str) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digest = md.digest(str.getBytes());
