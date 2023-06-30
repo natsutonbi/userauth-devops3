@@ -15,8 +15,8 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@TableName("`User`.`privilege`")
-public class privilege extends Model<group>{
+@TableName("`User`.`permissions`")
+public class permission extends Model<group>{
     public String id;//索引
     public String name;//展示
     public String action;//具体命令(访问,禁止访问 | 上传,删除,隐藏 | 以及设置赋权;userService里面的操作)
