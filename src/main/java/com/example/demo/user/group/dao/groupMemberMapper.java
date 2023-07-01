@@ -18,6 +18,6 @@ public interface groupMemberMapper extends BaseMapper<groupMember>{
     @Select("SELECT * FROM `User`.`group_member` WHERE groupid=#{groupid} and username=#{username}")
     groupMember getMember(@Param("username")String username,@Param("groupid")String groupid);
 
-    @Delete("DELTE FROM `User`.`group_member` WHERE groupid=#{groupid} and username=#{username}")
+    @Delete("DELTE FROM `User`.`group_member` WHERE username=#{username} and groupid=#{groupid}")
     int deleteMember(@Param("username") String username,@Param("groupid")String groupid);
 }

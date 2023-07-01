@@ -48,7 +48,7 @@ public class groupMemberServiceImpl implements groupMemberService{
     @Override
     public int kick(String username,String groupid){
         groupMember member=memberMapper.getMember(username, groupid);
-        if(member==null) return 0;
+        if((member.username).equals("")||member==null) return -1;
         if(member.grouprole=="owner") return -1;
         return memberMapper.deleteMember(username, groupid);
     }
@@ -63,10 +63,11 @@ public class groupMemberServiceImpl implements groupMemberService{
     @Override
     public int delGroup(String groupid){
         List<groupMember> members=getMembers(groupid);
-        for(groupMember member:members){
-            if(kick(member.username, groupid)==-1)
-                return -1;
-        }
+        if(members==null) return 0;
+        // for(groupMember member:members){
+        //     if(kick(member.username, groupid)==-1)
+        //         return -1;
+        // }
         return 0;
     }
 }

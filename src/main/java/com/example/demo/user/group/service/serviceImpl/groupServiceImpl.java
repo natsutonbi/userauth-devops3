@@ -82,6 +82,6 @@ public class groupServiceImpl implements groupService {
     public int delete(String groupid)
     {
         memberService.delGroup(groupid);
-        return gMapper.deleteById(groupid);
+        return gMapper.deleteByGroupID(groupid);
     }
 }
