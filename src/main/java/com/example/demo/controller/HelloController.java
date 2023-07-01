@@ -29,7 +29,7 @@ public class HelloController {
         return "index";
     }
     @ResponseBody
-    @RequestMapping("/echo")
+    @RequestMapping("/echo/**")
     public String echoPath(HttpServletRequest request){
         return request.getServletPath();
     }
