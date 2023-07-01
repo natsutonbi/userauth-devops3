@@ -33,8 +33,8 @@ public class groupController {
     }
 
     @ResponseBody
-    @RequestMapping("/get")
-    String getGroup(@RequestParam("groupid") String groupid){
+    @RequestMapping("/get/{gid}")
+    String getGroup(@PathVariable("gid") String groupid){
         return gserv.getByID(groupid).toString();
     }
 

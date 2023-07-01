@@ -11,20 +11,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.example.demo.user.dao.entity.userAccountInfo;
 import com.example.demo.user.service.impl.userServiceImpl;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-public class filterTest {
-    // @Autowired
-    // private userDetailServiceImpl impl;
+// @SpringBootTest
+// @RunWith(SpringRunner.class)
+// public class filterTest {
+//     // @Autowired
+//     // private userDetailServiceImpl impl;
 
-    @Autowired
-    private userServiceImpl myimpl;
+//     @Autowired
+//     private userServiceImpl myimpl;
     
-    // @Test
-    // public void loadByName()throws Exception{
-    //     // UserDetails details=impl.loadUserByUsername("root");
-    //     userAccountInfo info=myimpl.getInfoByUsername("root");
-    //     if(!(details.getPassword()).equals(info.password))
-    //         throw new Exception("查询不匹配,details的是"+details.getPassword()+"而mapper的是"+info.password);
-    // }
-}
+//     // @Test
+//     // public void loadByName()throws Exception{
+//     //     // UserDetails details=impl.loadUserByUsername("root");
+//     //     userAccountInfo info=myimpl.getInfoByUsername("root");
+//     //     if(!(details.getPassword()).equals(info.password))
+//     //         throw new Exception("查询不匹配,details的是"+details.getPassword()+"而mapper的是"+info.password);
+//     // }
+// }
