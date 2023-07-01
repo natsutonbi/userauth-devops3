@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @TableName("`User`.`permissions`")
-public class permission extends Model<permission>{
+public class permissionInfo extends Model<permissionInfo>{
     public String path;
     public String methods;//all,get,post,put,n-get,n-all
     
