@@ -38,7 +38,10 @@ public class dbController {
 	private final static String username = "outer";//MySQL数据库登录用户名
 	private final static String password = "123456";//MySQL数据库登录密码
     
-    @GetMapping("/v1/grade")
+    
+	
+	
+	@GetMapping("/v1/grade")
     public String grade(ModelMap map){
         ArrayList<gradeItem> item_list=new ArrayList<gradeItem>();
         try {
