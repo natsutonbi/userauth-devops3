@@ -1,5 +1,5 @@
 server:
-  port: 8080  # 默认端口
+  port: 80  # 默认端口
 management:
   endpoints:
     web:
@@ -9,6 +9,8 @@ management:
     health:
       show-details: ALWAYS
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: demoApp
   # 需要将其设置为always，彩色打印日志
@@ -21,15 +23,14 @@ spring:
         url: http://localhost:6288
         instance:
           service-url: http://localhost:8080
-  security:
-    user:
-      name: admin
-      password: 123456
+  # security:
+  #   user:
+  #     name: admin
+  #     password: 123456
   datasource:  # 配置mysql
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://114.116.254.100:3306
-    username: outer
-    password: 123456
+    url: ${DATASOURCE_ADDRESS}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
   sql:
     init: 
       schema-locations:
@@ -49,9 +50,9 @@ spring:
     cache: false                  #缓存(默认开启，开发时建议关闭)
 # 以上关于thymeleaf的这些参数其实都无需设置，因为都默认设置好了。参考：ThymeleafProperties
   mail:
-    host: smtp.163.com
-    username: kv30246@163.com
-    password: HITNYKVIRNQOFHGE
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
   kafka:
     bootstrap-servers: 114.116.254.100:9092 #node1:9092,node2:9092,node3:9092 #Kafka集群
     producer:    #生产者配置

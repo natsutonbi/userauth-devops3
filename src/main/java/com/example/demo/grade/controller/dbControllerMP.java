@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.grade.dao.entity.gradeItem;
-import com.example.demo.service.gradeService;
+import com.example.demo.grade.service.gradeService;
 
 import org.springframework.ui.ModelMap;
 

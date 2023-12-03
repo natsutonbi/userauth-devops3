@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.0.10</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -27,7 +28,7 @@
             	<activeByDefault>true</activeByDefault>
         	</activation>
     	</profile>
-    	<profile>
+    	<!-- <profile>
         	<id>dev</id>
         	<properties>
             	<spring.active>dev</spring.active>
@@ -38,7 +39,7 @@
         	<properties>
             	<spring.active>prd</spring.active>
         	</properties>
-    	</profile>
+    	</profile> -->
 	</profiles>
 	<!--资源目录，不过貌似是默认的
 	<resources>
@@ -52,19 +53,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
-		<!--mybatis启动器
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>3.0.2</version>
-		</dependency>-->
-
-		<!--<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-			<version>3.5.13</version>
-		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -133,10 +121,10 @@
 			</exclusions>
 		</dependency>
 
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>de.codecentric</groupId>
@@ -147,6 +135,12 @@
 			<groupId>de.codecentric</groupId>
 			<artifactId>spring-boot-admin-starter-server</artifactId>
 		</dependency>-->
+		        <!-- apache 集合工具类 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.1</version>
+        </dependency>
 	</dependencies>
 
 	<build>

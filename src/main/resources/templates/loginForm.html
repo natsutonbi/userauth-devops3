@@ -25,7 +25,7 @@
         <!--判断-->
         <p style="color:red" th:text="${session.errMsg}" th:if="${not #strings.isEmpty(session.errMsg)}"></p>
         <p style="color:red" th:text="${loginErrMsg}" th:if="${not #strings.isEmpty(loginErrMsg)}"></p>
-        <form class="layui-form" th:action="@{/user/login/val}" method="post">
+        <form class="layui-form" th:action="@{/user/login}" method="post">
             <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
             <hr class="hr15">
             <input name="password" placeholder="密码" type="password" lay-verify="required" class="layui-input">

@@ -1,0 +1,7 @@
+{
+    "type":"object",
+    "properties":{
+        "gate":{"type":"string"},
+        "credient":{"type":"string"}
+    }
+}

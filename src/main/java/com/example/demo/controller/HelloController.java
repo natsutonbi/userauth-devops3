@@ -1,4 +1,7 @@
 package com.example.demo.controller;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,5 +35,14 @@ public class HelloController {
     @RequestMapping("/echo/**")
     public String echoPath(HttpServletRequest request){
         return request.getServletPath();
+    }
+
+    @Autowired
+    DataSource datasrc;
+
+    @ResponseBody
+    @RequestMapping("/property")
+    public Object req_property(){
+        return datasrc;
     }
 }

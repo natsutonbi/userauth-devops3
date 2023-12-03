@@ -31,11 +31,11 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
     　　  <target>：字符串System.out(默认)或者System.err
      -->
     <!-- 自定义控制台输出日志 -->
-    <appender name="CONSOLE-LOG" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- <appender name="CONSOLE-LOG" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%-5p] [%t] [%C:%L] %m%n</pattern>
+            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.SSS}] [%-5p] [%t] [%C:%L] %m%n</pattern>
         </layout>
-    </appender>
+    </appender> -->
 
     <!-- 引入spirng boot默认的logback配置文件 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
@@ -81,7 +81,7 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
             <onMismatch>ACCEPT</onMismatch>
         </filter>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%-5p] [%t] [%C:%L] %m%n</pattern>
+            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.SSS}] [%-5p] [%t] [%C:%L] %m%n</pattern>
         </encoder>
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -97,7 +97,7 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
             <level>ERROR</level>
         </filter>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%-5p] [%t] [%C:%L] %m%n</pattern>
+            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.SSS}] [%-5p] [%t] [%C:%L] %m%n</pattern>
         </encoder>
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -108,7 +108,7 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
 
     <!-- <appender name="GENERAL-LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
-            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.sss}] [%-5p] [%t] [%C:%L] %m%n</pattern>
+            <pattern>[%d{yyyy-MM-dd' 'HH:mm:ss.SSS}] [%-5p] [%t] [%C:%L] %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_HOME}//${APP_NAME}.file.log</fileNamePattern>
@@ -126,7 +126,7 @@ debug: 当此属性设置为true时，将打印出logback内部日志信息，�
     <springProperty scope="context" name="LOG_NAME" source="logging.file.name"/>
     <appender name="File" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_NAME}</file>
-        <append>true</append>　
+        <append>true</append>
         <encoder>
             <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
