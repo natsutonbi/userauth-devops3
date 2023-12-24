@@ -11,8 +11,12 @@ import com.example.demo.security.mapper.entity.Account;
 import com.example.demo.security.service.MyUser;
 import com.example.demo.security.service.MyUserManager;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 @Controller
-@RequestMapping("/v2/user")
+@RequestMapping("/api/user")
+@Tag(name = "用户基础接口", description = "登录/注册/注销")
 public class UserBaseController {
 
     @Autowired
@@ -32,5 +36,12 @@ public class UserBaseController {
         MyUser user = new MyUser(account, null).addRole("USER");
         manager.createUser(user);
         return username;
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("username") String username){
+        manager.deleteUser(username);
+        return "success delete user %s".formatted(username);
     }
 }

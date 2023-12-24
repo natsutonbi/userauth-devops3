@@ -7,5 +7,4 @@ import com.example.demo.security.mapper.entity.Permission;
 
 @Mapper
 public interface PermissionMapper extends BaseMapper<Permission> {
-    
 }

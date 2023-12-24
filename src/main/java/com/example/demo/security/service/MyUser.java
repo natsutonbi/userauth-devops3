@@ -1,10 +1,8 @@
 package com.example.demo.security.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 
 import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,11 +16,11 @@ import lombok.Data;
 public class MyUser implements UserDetails,CredentialsContainer{
 
     private Account account;
-    private Collection<SimpleGrantedAuthority> authorities;
+    private HashSet<SimpleGrantedAuthority> authorities;
 
     public MyUser addAuthority(String... authorities){
         if (this.authorities == null){
-            this.authorities = new ArrayList<>();
+            this.authorities = new HashSet<SimpleGrantedAuthority>();
         }
         for(String authority:authorities){
             this.authorities.add(new SimpleGrantedAuthority(authority));
@@ -32,7 +30,7 @@ public class MyUser implements UserDetails,CredentialsContainer{
 
     public MyUser addRole(String... roles){
         if (this.authorities == null){
-            this.authorities = new ArrayList<>();
+            this.authorities = new HashSet<SimpleGrantedAuthority>();
         }
         for(String role:roles){
             if(role.startsWith("ROLE_"))
@@ -43,7 +41,7 @@ public class MyUser implements UserDetails,CredentialsContainer{
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public HashSet<SimpleGrantedAuthority> getAuthorities() {
         return authorities; 
     }
 

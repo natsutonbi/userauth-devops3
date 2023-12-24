@@ -1,24 +1,13 @@
 package com.example.demo.security.service;
 
-import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.GroupManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Service;
 
-public class MyAuthManager implements UserDetailsManager, GroupManager {
-
-    @Autowired
-    AuthorizeService service;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return service.loadUserByUsername(username);
-    }
+@Service
+public class MyGroupManager implements GroupManager {
 
     @Override
     public void addGroupAuthority(String groupName, GrantedAuthority authority) {
@@ -78,36 +67,6 @@ public class MyAuthManager implements UserDetailsManager, GroupManager {
     public void renameGroup(String oldName, String newName) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'renameGroup'");
-    }
-
-    @Override
-    public void changePassword(String oldPassword, String newPassword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
-    }
-
-    @Override
-    public void createUser(UserDetails user) {
-        Iterator<? extends GrantedAuthority> iter =  user.getAuthorities().iterator();
-        iter.next().getAuthority();
-    }
-
-    @Override
-    public void deleteUser(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
-    }
-
-    @Override
-    public void updateUser(UserDetails user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
-    }
-
-    @Override
-    public boolean userExists(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'userExists'");
     }
     
 }

@@ -7,5 +7,4 @@ import com.example.demo.security.mapper.entity.Role;
 
 @Mapper
 public  interface RoleMapper extends BaseMapper<Role>{
-    
 }

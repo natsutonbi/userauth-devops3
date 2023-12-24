@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/v2/user/debug")
+@RequestMapping("/api/user/debug")
 public class SecurityDebugController {
 
     @ResponseBody
     @RequestMapping("/whoami")
     public String whoami(Authentication currentAuth){
+        if(currentAuth == null)
+            return "you are visitor";
         return currentAuth.getName();
     }
 }

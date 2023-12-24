@@ -1,7 +1,10 @@
 package com.example.demo.security.service;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +23,17 @@ import com.example.demo.security.mapper.entity.Permission;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-public class MyUserManager {
+@Service
+public class MyUserManager implements UserDetailsService {
 
     @Autowired
     UserMapper userMapper;
@@ -45,7 +53,27 @@ public class MyUserManager {
     @Value("${snowflake.datacenterId}")
     private static long datacenterId;
 
-    private static SnowFlake usernameGenerator=new SnowFlake(workId,datacenterId);
+    private static SnowFlake usernameGenerator = new SnowFlake(workId,datacenterId);
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account = userMapper.selectById(username);
+        if(account == null)  throw new UsernameNotFoundException("用户不存在");
+        QueryWrapper<Permission> permQueryWrapper = new QueryWrapper<Permission>().eq("username", username).select("permission");
+        HashSet<SimpleGrantedAuthority> authorities = permissionMapper
+                                                    .selectList(permQueryWrapper)
+                                                    .stream()
+                                                    .map(permission->{return new SimpleGrantedAuthority(permission.getPermission());})
+                                                    .collect(Collectors.toCollection(HashSet::new));
+        QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<Role>().eq("username", username).select("role");
+        authorities.addAll(
+            roleMapper.selectList(roleQueryWrapper)
+            .stream()
+            .map(role->{return new SimpleGrantedAuthority(role.getRole());})
+            .collect(Collectors.toCollection(HashSet::new))
+        );
+        return new MyUser(account,authorities);
+    }
 
     public String getNewUsername() {
         return Long.toString(usernameGenerator.nextId());
@@ -64,6 +92,48 @@ public class MyUserManager {
             }
             else{
                 permissionMapper.insert(new Permission(account.getUsername(),auth));
+            }
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUser(MyUser updateInfo) throws IllegalAccessException{
+        if(updateInfo == null) return;
+        String username = updateInfo.getUsername();
+        MyUser oldUser = (MyUser)loadUserByUsername(username);
+        Account oldAccount = oldUser.getAccount(), newAccount = updateInfo.getAccount();
+        if(newAccount != null){
+            newAccount.setPassword(oldAccount.getPassword());
+            userMapper.updateById(newAccount);
+        }
+        
+        Set<SimpleGrantedAuthority> newAuthorities = updateInfo.getAuthorities(),oldAuthorities = oldUser.getAuthorities();
+        if(newAuthorities == null) return;
+        
+        Set<SimpleGrantedAuthority> common = new HashSet<>(newAuthorities);
+        common.retainAll(oldAuthorities);
+        Set<SimpleGrantedAuthority> remove = oldAuthorities,add = newAuthorities;
+        remove.removeAll(common);
+        add.removeAll(common);
+        
+        for(SimpleGrantedAuthority del:remove) {
+            String auth = del.getAuthority();
+            if(auth.startsWith("ROLE_")){
+                QueryWrapper<Role> delRoleWrapper = new QueryWrapper<Role>().eq("username", username).eq("role",auth);
+                roleMapper.delete(delRoleWrapper);
+            }else{
+                QueryWrapper<Permission> delRoleWrapper = new QueryWrapper<Permission>().eq("username", username).eq("permission",auth);
+                permissionMapper.delete(delRoleWrapper);
+            }
+        }
+        for(SimpleGrantedAuthority ins:add) {
+            String auth = ins.getAuthority();
+            if(auth.startsWith("ROLE_")){
+                Role role = new Role(username,auth);
+                roleMapper.insert(role);
+            }else{
+                Permission permission = new Permission(username,auth);
+                permissionMapper.insert(permission);
             }
         }
     }

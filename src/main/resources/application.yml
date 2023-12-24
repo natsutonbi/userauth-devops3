@@ -1,13 +1,8 @@
 server:
   port: 80  # 默认端口
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: ALWAYS
+nacos:
+  discovery:
+    server-addr: ${NACOS_SERVER_ADDRESS}
 spring:
   config:
     import: optional:file:.env[.properties]
@@ -17,16 +12,14 @@ spring:
   output:
     ansi:
       enabled: always #彩色日志
-  boot:
-    admin:
-      client:
-        url: http://localhost:6288
-        instance:
-          service-url: http://localhost:8080
-  # security:
-  #   user:
-  #     name: admin
-  #     password: 123456
+  security:
+    jwt:
+      key: ${JWT_KEY}
+      expire: ${JWT_EXPIRE}
+      limit:
+        basic: ${JWT_FRESH_LIMIT_BASIC}
+        aggresive: ${JWT_FRESH_LIMIT_AGGRESIVE}
+        alter_frequency: ${JWT_FRESH_LIMIT_ALTER_FREQ}
   datasource:  # 配置mysql
     url: ${DATASOURCE_ADDRESS}
     username: ${DATASOURCE_USERNAME}
@@ -43,12 +36,6 @@ spring:
       host: 114.116.254.100
       port: 6379
       password: 112358&TonBi!
-  thymeleaf:
-    prefix: classpath:/templates/ #视图前缀
-    suffix: .html                 #视图后缀
-    encoding: UTF-8               #编码
-    cache: false                  #缓存(默认开启，开发时建议关闭)
-# 以上关于thymeleaf的这些参数其实都无需设置，因为都默认设置好了。参考：ThymeleafProperties
   mail:
     host: ${MAIL_HOST}
     username: ${MAIL_USERNAME}
@@ -80,14 +67,21 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka提供的序列化
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka提供的反序列化类
       auto-commit-interval: 1000ms # 提交offset延时(接收到消息后多久提交offset)
-
+springdoc:
+  api-docs:
+    path: "/docs/api"
+  # swagger-ui:
+  #   path: "/docs/swagger"
+  #   operationsSorter: method
 logging:
   file:
     name: logs/demoApp.file.log
 snowflake:
-  datacenterId: 1
+  datacenterId: ${DATACENTER}
   user:
-    workId: 1
+    workId: ${USERCENTERID}
   group:
-    workId: 2
+    workId: ${GROUPCENTERID}
+frontend:
+  address: ${FRONT_ADDRESS}
 
