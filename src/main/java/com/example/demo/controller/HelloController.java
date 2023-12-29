@@ -5,17 +5,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.utils.RestBean;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.ui.ModelMap;
 @Controller
+@RestController
 public class HelloController {
     @ResponseBody
     @GetMapping("/hello")
     public String hello()
     {
-        return "hello world";
+        return RestBean.success("hello world").asJsonString();
     }
     
     @ResponseBody

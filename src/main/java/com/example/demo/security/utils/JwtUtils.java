@@ -6,7 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,19 +40,19 @@ public class JwtUtils {
     @Value("${spring.security.jwt.limit.alter_frequency}")
     private int alter_frequency;
 
-    @Resource
+    @Autowired
     StringRedisTemplate template;
 
-    @Resource
+    @Autowired
     FlowUtils utils;
 
     /**
      * 让指定Jwt令牌失效
-     * @param headerToken 请求头中携带的令牌
+     * @param rawJwt 请求头中携带的令牌
      * @return 是否操作成功
      */
-    public boolean invalidateJwt(String headerToken){
-        String token = this.convertToken(headerToken);
+    public boolean invalidateJwt(String rawJwt){
+        String token = this.convertToken(rawJwt);
         Algorithm algorithm = Algorithm.HMAC256(key);
         JWTVerifier jwtVerifier = JWT.require(algorithm).build();
         try {
@@ -66,7 +67,7 @@ public class JwtUtils {
      * 根据配置快速计算过期时间
      * @return 过期时间
      */
-    public Date expireTime() {
+    public Date getExpireTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, expire_hours);
         return calendar.getTime();
@@ -78,9 +79,18 @@ public class JwtUtils {
      * @return 令牌
      */
     public String createJwt(UserDetails user) {
-        // if(this.frequencyCheck(Integer.parseInt(user.getUsername()))) {
+        return createJwt(user, getExpireTime());
+    }
+
+    /**
+     * 根据UserDetails生成对应的Jwt令牌
+     * @param user 用户信息
+     * @param expireDate 过期时间
+     * @return 令牌
+     */
+    public String createJwt(UserDetails user,Date expireDate){
+        if(this.frequencyCheck(user.getUsername())) {
             Algorithm algorithm = Algorithm.HMAC256(key);
-            Date expireDate = this.expireTime();
             return JWT.create()
                     .withJWTId(UUID.randomUUID().toString())
                     .withClaim("username", user.getUsername()) //username作为唯一标识符
@@ -90,9 +100,9 @@ public class JwtUtils {
                     .withIssuedAt(new Date()) //发布时间
                     .withExpiresAt(expireDate) //过期时间
                     .sign(algorithm);
-        // } else {
-        //     return null;
-        // }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -106,10 +116,10 @@ public class JwtUtils {
         Algorithm algorithm = Algorithm.HMAC256(key);
         JWTVerifier jwtVerifier = JWT.require(algorithm).build();
         try {
-            DecodedJWT verify = jwtVerifier.verify(token);
-            if(this.isInvalidToken(verify.getId())) return null;
-            Map<String, Claim> claims = verify.getClaims();
-            return new Date().after(claims.get("exp").asDate()) ? null : verify; // 是否过期
+            DecodedJWT verified = jwtVerifier.verify(token);
+            if(this.isInvalidToken(verified.getId())) return null; // 是否被手动失效
+            Map<String, Claim> claims = verified.getClaims();
+            return new Date().after(claims.get("exp").asDate()) ? null : verified; // 是否过期
         } catch (JWTVerificationException e) {
             return null;
         }
@@ -145,10 +155,10 @@ public class JwtUtils {
      * @param userId 用户ID
      * @return 是否通过频率检测
      */
-    // private boolean frequencyCheck(int userId){
-    //     String key = Const.JWT_FREQUENCY + userId;
-    //     return utils.limitOnceUpgradeCheck(key, alter_frequency, basic_cd_sec, aggresive_cd_sec);
-    // }
+    private boolean frequencyCheck(String username){
+        String key = Const.JWT_FREQUENCY + username;
+        return utils.limitOnceUpgradeCheck(key, alter_frequency, basic_cd_sec, aggresive_cd_sec);
+    }
 
     /**
      * 校验并转换请求头中的Token令牌
@@ -164,14 +174,14 @@ public class JwtUtils {
     /**
      * 将Token列入Redis黑名单中
      * @param uuid 令牌ID
-     * @param time 过期时间
+     * @param expireTime 过期时间
      * @return 是否操作成功
      */
-    private boolean deleteToken(String uuid, Date time){
+    private boolean deleteToken(String uuid, Date expireTime){
         if(this.isInvalidToken(uuid))
             return false;
         Date now = new Date();
-        long expire = Math.max(time.getTime() - now.getTime(), 0);
+        long expire = Math.max(expireTime.getTime() - now.getTime(), 0);
         template.opsForValue().set(Const.JWT_BLACK_LIST + uuid, "", expire, TimeUnit.MILLISECONDS);
         return true;
     }

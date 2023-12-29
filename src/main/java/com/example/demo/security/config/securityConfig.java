@@ -3,20 +3,25 @@ package com.example.demo.security.config;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
+import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,12 +31,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.demo.security.entity.vo.response.AuthorizeInfoVO;
 import com.example.demo.security.filter.JwtAuthorizeFilter;
 import com.example.demo.security.service.MyUserManager;
 import com.example.demo.security.utils.JwtUtils;
 import com.example.demo.utils.RestBean;
 
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -42,7 +47,14 @@ import jakarta.servlet.http.HttpServletResponse;
 //     @ComponentScan("com.example.demo.security.service")
 // })
 // @MapperScan("com.example.demo.security.mapper")
-public class securityConfig {
+public class SecurityConfig {
+
+    public static final String rolePrefix = "ROLE_";
+
+    @Bean
+    static GrantedAuthorityDefaults grantedAuthorityDefaults(){
+        return new GrantedAuthorityDefaults(rolePrefix);
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -66,8 +78,11 @@ public class securityConfig {
     @Value("${frontend.address}")
     String frontendAddress;
 
-    @Resource
+    @Autowired
     JwtAuthorizeFilter jwtAuthorizeFilter;
+
+    @Autowired
+    JwtUtils jwtUtils;
     
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
@@ -97,8 +112,7 @@ public class securityConfig {
                     CorsConfiguration cors = new CorsConfiguration();
                   	//添加前端站点地址，这样就可以告诉浏览器信任了
                   	cors.addAllowedOrigin(frontendAddress);
-                    //虽然也可以像这样允许所有 cors.addAllowedOriginPattern("*");
-                  	//但是这样并不安全，我们应该只许可给我们信任的站点
+                    //也可以允许所有 cors.addAllowedOriginPattern("*");
                     cors.setAllowCredentials(true);  //允许跨域请求中携带Cookie
                     cors.addAllowedHeader("*");   //其他的也可以配置，为了方便这里就 * 了
                     cors.addAllowedMethod("*");
@@ -108,11 +122,13 @@ public class securityConfig {
                     conf.configurationSource(source);
                 })
             .exceptionHandling(conf -> conf
-                    .authenticationEntryPoint(this::onUnauthorized))   
+                    .accessDeniedHandler(this::onAccessDeny)
+                    .authenticationEntryPoint(this::onUnauthorized)
+                    )   
             .csrf(conf -> conf.disable()) // 直接关闭全部的csrf校验
             .sessionManagement(conf -> conf.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtAuthorizeFilter, UsernamePasswordAuthenticationFilter.class);
-            
+
         //     .rememberMe(
         //         conf -> conf
         //             .alwaysRemember(false)
@@ -128,9 +144,16 @@ public class securityConfig {
         return http.build();
     }
 
+    void onAccessDeny(HttpServletRequest request,
+                      HttpServletResponse response,
+                      AccessDeniedException exception) throws IOException {
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(RestBean.forbidden(exception.getMessage()).asJsonString());
+    }
+
     void onUnauthorized(HttpServletRequest request,
-                                 HttpServletResponse response,
-                                 AuthenticationException exception) throws IOException {
+                        HttpServletResponse response,
+                        AuthenticationException exception) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(RestBean.unauthorized(exception.getMessage()).asJsonString());
     }
@@ -143,26 +166,51 @@ public class securityConfig {
         writer.write(RestBean.failure(401, exception.getMessage()).asJsonString());
     }
 
-    @Resource
-    JwtUtils jwtUtils;
-
     void onAuthenticationSuccess(HttpServletRequest request, 
                                  HttpServletResponse response, 
                                  Authentication authentication) throws IOException {
+        
         response.setContentType("application/json;charset=utf-8");
-        String token = jwtUtils.createJwt((UserDetails)authentication.getPrincipal());
-        PrintWriter writer = response.getWriter();
-        writer.write(RestBean.success(token).asJsonString());
+        Date expireDate = jwtUtils.getExpireTime();
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        String token = jwtUtils.createJwt(userDetails,expireDate);
+        
+        String prefix = grantedAuthorityDefaults().getRolePrefix();
+        List<String> roles= new ArrayList<>(),permissions = new ArrayList<>();
+        userDetails.getAuthorities().forEach(authority -> {
+            String authString = authority.getAuthority();
+            if(authString.startsWith(prefix)){
+                roles.add(authString.substring(prefix.length()));
+            }else{
+                permissions.add(authString);
+            }
+        });
+        // for(String authority:userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()){
+        //     if(authority.startsWith(prefix)){
+        //         roles.add(authority.substring(prefix.length()));
+        //     }else{
+        //         permissions.add(authority);
+        //     }
+        // }
+        AuthorizeInfoVO vo = new AuthorizeInfoVO();
+        vo.setExpire(expireDate);
+        vo.setPermissions(permissions);
+        vo.setRoles(roles);
+        vo.setToken(token);
+        vo.setUsername(userDetails.getUsername());
+        response.getWriter().write(RestBean.success(vo).asJsonString());
     }
 
     void onLogoutSuccess(HttpServletRequest request, 
-                                 HttpServletResponse response, 
-                                 Authentication authentication) throws IOException {
+                         HttpServletResponse response, 
+                         Authentication authentication) throws IOException {
         response.setContentType("application/json;charset=utf-8");
-        //TODO
-        User user = (User) authentication.getPrincipal();
-        String token = jwtUtils.createJwt(user);
         PrintWriter writer = response.getWriter();
-        writer.write(RestBean.success(token).asJsonString());
+        String rawJwt = request.getHeader("Authorization");
+        if(jwtUtils.invalidateJwt(rawJwt)){
+            writer.write(RestBean.success().asJsonString());
+        }else{
+            writer.write(RestBean.failure(400, "退出登录失败").asJsonString());
+        }
     }
 }

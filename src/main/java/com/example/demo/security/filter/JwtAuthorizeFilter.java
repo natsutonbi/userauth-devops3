@@ -2,6 +2,7 @@ package com.example.demo.security.filter;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,16 +13,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.security.utils.JwtUtils;
 
-import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/*
+ * 通过jwt验证
+ */
 @Component
 public class JwtAuthorizeFilter extends OncePerRequestFilter{
 
-    @Resource
+    @Autowired
     JwtUtils jwtUtils;
 
     @Override

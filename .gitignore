@@ -37,3 +37,5 @@ logs/*
 .env
 *.log
 /nacos/**
+.env.prod
+env.prod.yaml

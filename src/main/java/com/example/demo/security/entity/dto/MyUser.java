@@ -1,4 +1,4 @@
-package com.example.demo.security.service;
+package com.example.demo.security.entity.dto;
 
 import java.util.HashSet;
 
@@ -6,17 +6,24 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.demo.security.config.SecurityConfig;
 import com.example.demo.security.mapper.entity.Account;
 
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Nullable;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class MyUser implements UserDetails,CredentialsContainer{
+public class MyUser implements UserDetails, CredentialsContainer{
+
+    static final String rolePrefix = SecurityConfig.rolePrefix;
 
     private Account account;
     private HashSet<SimpleGrantedAuthority> authorities;
+
+    public MyUser(Account account, @Nullable HashSet<SimpleGrantedAuthority> authorities){
+        this.account = account;
+        this.authorities = authorities;
+    }
 
     public MyUser addAuthority(String... authorities){
         if (this.authorities == null){
@@ -33,9 +40,9 @@ public class MyUser implements UserDetails,CredentialsContainer{
             this.authorities = new HashSet<SimpleGrantedAuthority>();
         }
         for(String role:roles){
-            if(role.startsWith("ROLE_"))
-                throw new IllegalArgumentException("角色名不能以 'ROLE_' 前缀开头, 系统会自动添加");
-            this.authorities.add(new SimpleGrantedAuthority("ROLE_"+role));
+            if(role.startsWith(rolePrefix))
+                throw new IllegalArgumentException("角色名不能以 "+rolePrefix+" 前缀开头, 系统会自动添加");
+            this.authorities.add(new SimpleGrantedAuthority(rolePrefix+role));
         }
         return this;
     }
@@ -76,7 +83,7 @@ public class MyUser implements UserDetails,CredentialsContainer{
     }
 
     @Override
-    public void eraseCredentials() {//清除密码，防止二次利用
+    public void eraseCredentials() { //清除密码，防止二次利用
         account.setPassword(null);
     }
     

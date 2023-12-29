@@ -33,13 +33,30 @@
     "name": "spring.security.jwt.limit.alter_frequency",
     "type": "java.lang.int",
     "description": "using aggresive if token being freshed serveral times during CD'"
-  },{
+  },
+  {
     "name": "spring.security.jwt.limit.aggresive",
     "type": "java.lang.int",
     "description": "more limited token-freshing CD(s)"
-  },{
+  },
+  {
     "name": "spring.security.jwt.limit.basic",
     "type": "java.lang.int",
     "description": "basic token-freshing CD(s)"
+  },
+  {
+    "name": "spring.mail.verify-cd",
+    "type": "java.lang.String",
+    "description": "cooling-down time(s) when sending mail verify code"
+  },
+  {
+    "name": "spring.mail.verify-available",
+    "type": "java.lang.String",
+    "description": "mail verify code available time(min)"
+  },
+  {
+    "name": "nacos.client.ip",
+    "type": "java.lang.String",
+    "description": "service ip address that other services can achieve"
   }
 ]}

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.security.entity.dto.MyUser;
 import com.example.demo.security.mapper.entity.Account;
-import com.example.demo.security.service.MyUser;
 import com.example.demo.security.service.MyUserManager;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -12,12 +12,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.example.demo.security.config.SecurityConfig;
+import com.example.demo.security.entity.dto.MyUser;
 import com.example.demo.security.mapper.PermissionMapper;
 import com.example.demo.security.mapper.RoleMapper;
 import com.example.demo.security.mapper.UserMapper;
 import com.example.demo.security.mapper.entity.Account;
 import com.example.demo.security.mapper.entity.Role;
 import com.example.demo.security.utils.SnowFlake;
+
+
 import com.example.demo.security.mapper.entity.Permission;
 
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,6 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MyUserManager implements UserDetailsService {
+
+    static final String rolePrefix = SecurityConfig.rolePrefix;
 
     @Autowired
     UserMapper userMapper;
@@ -87,7 +93,7 @@ public class MyUserManager implements UserDetailsService {
         Iterator<? extends GrantedAuthority> iter = authorities.iterator();
         while (iter.hasNext()) {
             String auth = iter.next().getAuthority();
-            if(auth.startsWith("ROLE_")){
+            if(auth.startsWith(rolePrefix)){
                 roleMapper.insert(new Role(account.getUsername(),auth));
             }
             else{
@@ -97,13 +103,13 @@ public class MyUserManager implements UserDetailsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateUser(MyUser updateInfo) throws IllegalAccessException{
+    public void updateUser(MyUser updateInfo) throws IllegalAccessException{ //查一遍后对比
         if(updateInfo == null) return;
         String username = updateInfo.getUsername();
         MyUser oldUser = (MyUser)loadUserByUsername(username);
         Account oldAccount = oldUser.getAccount(), newAccount = updateInfo.getAccount();
-        if(newAccount != null){
-            newAccount.setPassword(oldAccount.getPassword());
+        if(newAccount != null){//MyUser的newAccount不可能为null
+            newAccount.setPassword(oldAccount.getPassword()); //密码不能通过这种方法修改
             userMapper.updateById(newAccount);
         }
         
@@ -118,7 +124,7 @@ public class MyUserManager implements UserDetailsService {
         
         for(SimpleGrantedAuthority del:remove) {
             String auth = del.getAuthority();
-            if(auth.startsWith("ROLE_")){
+            if(auth.startsWith(rolePrefix)){
                 QueryWrapper<Role> delRoleWrapper = new QueryWrapper<Role>().eq("username", username).eq("role",auth);
                 roleMapper.delete(delRoleWrapper);
             }else{
@@ -128,7 +134,7 @@ public class MyUserManager implements UserDetailsService {
         }
         for(SimpleGrantedAuthority ins:add) {
             String auth = ins.getAuthority();
-            if(auth.startsWith("ROLE_")){
+            if(auth.startsWith(rolePrefix)){
                 Role role = new Role(username,auth);
                 roleMapper.insert(role);
             }else{

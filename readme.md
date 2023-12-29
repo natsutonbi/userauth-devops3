@@ -22,3 +22,5 @@ Authorization: Bearer [token]
 
 - 后端：sb3+mysql+redis+mq+jwt
 - 前端：vue+vite+ElementPlus
+
+使用redis实现jwt黑名单机制
