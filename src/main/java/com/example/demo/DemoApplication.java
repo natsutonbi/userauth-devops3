@@ -15,6 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		log.info("demo app is running");
+		log.info("demo app is running"); 
 	}
 }
