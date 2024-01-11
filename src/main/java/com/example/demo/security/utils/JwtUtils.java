@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.demo.security.config.SecurityConfig;
+import com.example.demo.security.config.securityConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +90,7 @@ public class JwtUtils {
      * @return 令牌
      */
     public String createJwt(UserDetails user) {
-        return createJwt(user, getExpireTime(), SecurityConfig.rolePrefix);
+        return createJwt(user, getExpireTime(), securityConfig.rolePrefix);
     }
 
     /**

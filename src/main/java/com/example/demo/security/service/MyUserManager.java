@@ -12,7 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.example.demo.security.config.SecurityConfig;
+import com.example.demo.security.config.securityConfig;
 import com.example.demo.security.entity.dto.MyUser;
 import com.example.demo.security.mapper.PermissionMapper;
 import com.example.demo.security.mapper.RoleMapper;
@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MyUserManager implements UserDetailsService {
 
-    static final String rolePrefix = SecurityConfig.rolePrefix;
+    static final String rolePrefix = securityConfig.rolePrefix;
 
     @Autowired
     AccountMapper userMapper;

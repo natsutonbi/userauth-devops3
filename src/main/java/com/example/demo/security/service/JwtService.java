@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.security.config.SecurityConfig;
+import com.example.demo.security.config.securityConfig;
 import com.example.demo.security.utils.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class JwtService {
 
     public String creatJwt(Date expireDate, Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        String token = jwtUtils.createJwt(userDetails,expireDate,SecurityConfig.rolePrefix);
+        String token = jwtUtils.createJwt(userDetails,expireDate,securityConfig.rolePrefix);
         return token;
     }
 

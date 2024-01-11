@@ -6,7 +6,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.security.config.SecurityConfig;
+import com.example.demo.security.config.securityConfig;
 import com.example.demo.security.mapper.entity.Account;
 
 import jakarta.annotation.Nullable;
@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 public class MyUser implements UserDetails, CredentialsContainer{
 
-    static final String rolePrefix = SecurityConfig.rolePrefix;
+    static final String rolePrefix = securityConfig.rolePrefix;
 
     private Account account;
     private HashSet<SimpleGrantedAuthority> authorities;
