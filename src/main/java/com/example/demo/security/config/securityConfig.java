@@ -49,7 +49,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //     @ComponentScan("com.example.demo.security.service")
 // })
 // @MapperScan("com.example.demo.security.mapper")
-public class SecurityConfig {
+public class securityConfig {
 
     public static final String rolePrefix = "ROLE_";
 
