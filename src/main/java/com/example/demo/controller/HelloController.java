@@ -1,36 +1,26 @@
 package com.example.demo.controller;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.demo.utils.RestBean;
 
-import org.springframework.ui.ModelMap;
+
 @Controller
+@RestController
 public class HelloController {
-    @ResponseBody
+    
     @GetMapping("/hello")
-    public String hello()
+    public RestBean<String> hello()
     {
-        return "hello world";
+        return RestBean.success("你访问了/hello");
     }
-    @ResponseBody
-    @GetMapping("/hello/{id}")
-    public String helloId(@PathVariable("id") String id)
-    {
-        return "hello, "+id;
-    }
+    
     @GetMapping("/")
-    public String hello_html(ModelMap map)
+    public RestBean<String> hello_html()
     {
-        map.addAttribute("host", "http://127.0.0.1");
-        return "index";
+        return RestBean.success("index");
     }
-    @ResponseBody
-    @RequestMapping("/echo")
-    public String echoPath(HttpServletRequest request){
-        return request.getServletPath();
-    }
+
 }

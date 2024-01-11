@@ -1,51 +1,43 @@
-server:
-  port: 8080  # 默认端口
+
+# nacos:
+#   config:
+#     server-addr: ${NACOS_SERVER_ADDRESS}
+#   discovery:
+#     server-addr: ${NACOS_SERVER_ADDRESS}
+#   client:
+#     ip: ${NACOS_CLIENT_ADDRESS}
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
-    name: demoApp
-  #profiles:
-  #  active: adminserver
-  # 需要将其设置为always，彩色打印日志
-  output:
-    ansi:
-      enabled: always #彩色日志
-  boot:
-    admin:
-      client:
-        url: http://localhost:6288
-        instance:
-          service-url: http://localhost:8080
+    name: user-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDRESS}
   security:
-    user:
-      name: admin
-      password: 123456
+    jwt:
+      key: ${JWT_KEY}
+      expire: ${JWT_EXPIRE}
+      limit:
+        basic: ${JWT_FRESH_LIMIT_BASIC}
+        aggresive: ${JWT_FRESH_LIMIT_AGGRESIVE}
+        alter_frequency: ${JWT_FRESH_LIMIT_ALTER_FREQ}
   datasource:  # 配置mysql
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://114.116.254.100:3306
-    username: outer
-    password: 123456
-  sql:
-    init: 
-      schema-locations:
-      - classpath:db/userSchema.sql
-      data-locations:
-      - classpath:db/userData.sql
-      mode: never #可能不适于mysql
+    url: ${DATASOURCE_ADDRESS}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
   data:
     redis:
-      host: 114.116.254.100
-      port: 6379
-      password: 112358&TonBi!
-  thymeleaf:
-    prefix: classpath:/templates/ #视图前缀
-    suffix: .html                 #视图后缀
-    encoding: UTF-8               #编码
-    cache: false                  #缓存(默认开启，开发时建议关闭)
-# 以上关于thymeleaf的这些参数其实都无需设置，因为都默认设置好了。参考：ThymeleafProperties
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
   mail:
-    host: smtp.163.com
-    username: kv30246@163.com
-    password: HITNYKVIRNQOFHGE
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    verify-cd: ${MAIL_VERIFY_CD}
+    verify-available: ${MAIL_VERIFY_AVAILABLE}
   kafka:
     bootstrap-servers: 114.116.254.100:9092 #node1:9092,node2:9092,node3:9092 #Kafka集群
     producer:    #生产者配置
@@ -73,21 +65,27 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka提供的序列化
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka提供的反序列化类
       auto-commit-interval: 1000ms # 提交offset延时(接收到消息后多久提交offset)
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    health:
-      show-details: always
+server:
+  port: ${SERVER_PORT}  # 默认端口
+  servlet:
+    encoding:
+      charset: UTF-8 # 默认值
+      force-response: true
+springdoc:
+  api-docs:
+    path: "/docs/api"
+  # swagger-ui:
+  #   path: "/docs/swagger"
+  #   operationsSorter: method
 logging:
   file:
     name: logs/demoApp.file.log
 snowflake:
-  datacenterId: 1
+  datacenterId: ${DATACENTER}
   user:
-    workId: 1
+    workId: ${USERCENTERID}
   group:
-    workId: 2
+    workId: ${GROUPCENTERID}
+frontend:
+  address: ${FRONT_ADDRESS}
 

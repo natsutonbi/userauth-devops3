@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>Please Log In</title>
+	</head>
+	<body>
+		<h1>Please Log In</h1>
+		<form action="/user/login/val" method="post">
+			<input type="text" id="username" name="username" placeholder="Username" class="ad-input">
+			<input type="password" id="password" name="password" placeholder="Password" class="ad-input">
+			<div class="ad-checkbox">
+				<label>
+					<input type="checkbox" name="remember-me" class="ad-checkbox">
+					<span>Remember Me</span>
+				</label>
+			</div>
+			<!-- <input type="text" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}" hidden> -->
+			<button type="submit" class="ad-btn ad-login-member">Login</button>
+		</form>
+	</body>
+</html>

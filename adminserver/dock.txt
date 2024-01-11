@@ -1,0 +1,5 @@
+printf "1TXTFGQMXRBKDX3FXRY9" | openssl dgst -binary -sha256 -hmac "FsxaI8hp1BRW0ug2myIDuWuD0T5T9yxnIUxKZ0u6" | od -An -vtx1 | sed 's/[ \n]//g' | sed 'N;s/\n//'
+
+cn-north-4@1TXTFGQMXRBKDX3FXRY9
+
+1f804a8cbc0d2b25001891b6facfc6db464146d516aa818bee80ebe03152c84a
