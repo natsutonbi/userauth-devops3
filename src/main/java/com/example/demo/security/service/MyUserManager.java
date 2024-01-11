@@ -16,7 +16,7 @@ import com.example.demo.security.config.SecurityConfig;
 import com.example.demo.security.entity.dto.MyUser;
 import com.example.demo.security.mapper.PermissionMapper;
 import com.example.demo.security.mapper.RoleMapper;
-import com.example.demo.security.mapper.UserMapper;
+import com.example.demo.security.mapper.AccountMapper;
 import com.example.demo.security.mapper.entity.Account;
 import com.example.demo.security.mapper.entity.Role;
 import com.example.demo.security.utils.SnowFlake;
@@ -42,7 +42,7 @@ public class MyUserManager implements UserDetailsService {
     static final String rolePrefix = SecurityConfig.rolePrefix;
 
     @Autowired
-    UserMapper userMapper;
+    AccountMapper userMapper;
 
     @Autowired
     RoleMapper roleMapper;

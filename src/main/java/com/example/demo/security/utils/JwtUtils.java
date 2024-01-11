@@ -6,11 +6,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.demo.security.config.SecurityConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.security.core.Authentication;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,9 @@ public class JwtUtils {
     @Autowired
     FlowUtils utils;
 
+    // @Autowired
+    // Authentication authentication;
+
     /**
      * 让指定Jwt令牌失效
      * @param rawJwt 请求头中携带的令牌
@@ -73,30 +77,57 @@ public class JwtUtils {
         return calendar.getTime();
     }
 
+    // public String creatJwt(){
+    //     Date expireDate = this.getExpireTime();
+    //     UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+    //     String token = this.createJwt(userDetails,expireDate);
+    //     return token;
+    // }
+
     /**
      * 根据UserDetails生成对应的Jwt令牌
      * @param user 用户信息
      * @return 令牌
      */
     public String createJwt(UserDetails user) {
-        return createJwt(user, getExpireTime());
+        return createJwt(user, getExpireTime(), SecurityConfig.rolePrefix);
+    }
+
+    /**
+     * 根据UserDetails生成对应的Jwt令牌
+     * @param user 用户信息
+     * @param rolePrefix 角色前缀
+     * @return 令牌
+     */
+    public String createJwt(UserDetails user, String rolePrefix) {
+        return createJwt(user, getExpireTime(), rolePrefix);
     }
 
     /**
      * 根据UserDetails生成对应的Jwt令牌
      * @param user 用户信息
      * @param expireDate 过期时间
+     * @param rolePrefix 角色前缀
      * @return 令牌
      */
-    public String createJwt(UserDetails user,Date expireDate){
+    public String createJwt(UserDetails user, Date expireDate, String rolePrefix){
         if(this.frequencyCheck(user.getUsername())) {
             Algorithm algorithm = Algorithm.HMAC256(key);
+            List<String> roles= new ArrayList<>(), permissions = new ArrayList<>();
+            user.getAuthorities().forEach(authority -> {
+                String authString = authority.getAuthority();
+                if(authString.startsWith(rolePrefix)){
+                    roles.add(authString.substring(rolePrefix.length()));
+                }else{
+                    permissions.add(authString);
+                }
+            });
+            // TODO 分离写成函数
             return JWT.create()
                     .withJWTId(UUID.randomUUID().toString())
                     .withClaim("username", user.getUsername()) //username作为唯一标识符
-                    .withClaim("authorities", user.getAuthorities()
-                            .stream()
-                            .map(GrantedAuthority::getAuthority).toList()) //转换为string list
+                    .withClaim("permissions", permissions)
+                    .withClaim("roles", roles)
                     .withIssuedAt(new Date()) //发布时间
                     .withExpiresAt(expireDate) //过期时间
                     .sign(algorithm);

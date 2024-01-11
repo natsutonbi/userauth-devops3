@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit;
 public class MailService {
 
     @Autowired
-    private JavaMailSender mailSender;
+    JavaMailSender mailSender;
 
     @Autowired
-    private ResourceLoader resourceLoader;
+    ResourceLoader resourceLoader;
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
@@ -45,7 +45,7 @@ public class MailService {
     private String from;
 
     //发送验证码同时存入redis
-    public void generateEmailVerifyCode(String email, String address) throws TooManyRequestsException,MailException{
+    public void generateEmailVerifyCode(String email, String address) throws TooManyRequestsException, MailException{
         synchronized (address.intern()) {
             if(!this.ifVerifyLimited(address))
                 throw new TooManyRequestsException();
@@ -68,6 +68,10 @@ public class MailService {
         return code.equals(getEmailVerifyCode(email));
     }
 
+    /**
+     * 删除验证码，防止重用
+     * @param email 对应邮箱
+     */
     public void delEmailVerifyCode(String email){
         String key = Const.VERIFY_EMAIL_DATA + email;
         stringRedisTemplate.delete(key);

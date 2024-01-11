@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -42,6 +43,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 // @ComponentScans({
 //     @ComponentScan("com.example.demo.security.controller"),
 //     @ComponentScan("com.example.demo.security.service")
@@ -124,7 +126,7 @@ public class SecurityConfig {
             .exceptionHandling(conf -> conf
                     .accessDeniedHandler(this::onAccessDeny)
                     .authenticationEntryPoint(this::onUnauthorized)
-                    )   
+                    )
             .csrf(conf -> conf.disable()) // 直接关闭全部的csrf校验
             .sessionManagement(conf -> conf.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtAuthorizeFilter, UsernamePasswordAuthenticationFilter.class);
@@ -173,7 +175,7 @@ public class SecurityConfig {
         response.setContentType("application/json;charset=utf-8");
         Date expireDate = jwtUtils.getExpireTime();
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        String token = jwtUtils.createJwt(userDetails,expireDate);
+        String token = jwtUtils.createJwt(userDetails,expireDate, rolePrefix);
         
         String prefix = grantedAuthorityDefaults().getRolePrefix();
         List<String> roles= new ArrayList<>(),permissions = new ArrayList<>();
@@ -185,13 +187,6 @@ public class SecurityConfig {
                 permissions.add(authString);
             }
         });
-        // for(String authority:userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()){
-        //     if(authority.startsWith(prefix)){
-        //         roles.add(authority.substring(prefix.length()));
-        //     }else{
-        //         permissions.add(authority);
-        //     }
-        // }
         AuthorizeInfoVO vo = new AuthorizeInfoVO();
         vo.setExpire(expireDate);
         vo.setPermissions(permissions);

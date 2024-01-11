@@ -67,6 +67,10 @@ spring:
       auto-commit-interval: 1000ms # 提交offset延时(接收到消息后多久提交offset)
 server:
   port: ${SERVER_PORT}  # 默认端口
+  servlet:
+    encoding:
+      charset: UTF-8 # 默认值
+      force-response: true
 springdoc:
   api-docs:
     path: "/docs/api"
